@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Image, Text, TouchableOpacity, View } from 'react-native';
 
 const CHOICES = [
   {
@@ -31,32 +31,96 @@ const Button = props => {
   )
 };
 
+const ChoiceCard = ({ player, choice: { uri, name } }) => {
+  const title = name && name.charAt(0).toUpperCase() + name.slice(1);
+
+  return (
+    <View style={styles.choiceContainer}>
+      <Text style={styles.choiceDescription}>{player}</Text>
+      <Image source={{ uri }} resizeMode="contain" style={styles.choiceImage} />
+      <Text style={styles.choiceCardTitle}>{title}</Text>
+    </View>
+  );
+};
+
 export default class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      gamePrompt: 'Choose your weapon!'
+      gamePrompt: 'Choose your weapon!',
+      userChoice: {},
+      computerChoice: {}
     };
   };
   onPress = userChoice => {
-    console.log('userChoice', userChoice);
+    const [result, compChoice] = getRoundOutcome(userChoice);
+
+    const newUserChoice = CHOICES.find(choice => choice.name === userChoice);
+    const newComputerChoice = CHOICES.find(choice => choice.name === compChoice);
+  
+    this.setState({
+      userChoice: newUserChoice,
+      computerChoice: newComputerChoice,
+      gamePrompt: result
+    })
   }
   
   render(){
     return (
       <View style={styles.container}>
-        <Text>{this.state.gamePrompt}</Text>
-        {
-          CHOICES.map(choice => {
-            return (
-              <Button key={choice.name} name={choice.name} onPress={this.onPress}/>
-            )
-          })
-        }
+        <Text style={{ fontSize: 30, color: getResultColor(this.state.gamePrompt) }}>{this.state.gamePrompt}</Text>
+        <View style={styles.choicesContainer}>
+          <ChoiceCard
+            player="Player"
+            choice={this.state.userChoice}
+          />
+          <Text style={{ color: '#250902' }}>vs</Text>
+          <ChoiceCard
+            player="Computer"
+            choice={this.state.computerChoice}
+          />
+        </View>
+
+        <View style={styles.buttonContainer}>        
+          {
+            CHOICES.map(choice => {
+              return (
+                <Button key={choice.name} name={choice.name} onPress={this.onPress}/>
+              )
+            })
+          }
+        </View>
       </View>  
     );
   }
 }
+
+const randomComputerChoice = () =>
+  CHOICES[Math.floor(Math.random() * CHOICES.length)];
+
+const getRoundOutcome = userChoice => {
+  const computerChoice = randomComputerChoice().name;
+  let result;
+
+  if (userChoice === 'rock') {
+    result = computerChoice === 'scissors' ? 'Victory!' : 'Defeat!';
+  }
+  if (userChoice === 'paper') {
+    result = computerChoice === 'rock' ? 'Victory!' : 'Defeat!';
+  }
+  if (userChoice === 'scissors') {
+    result = computerChoice === 'paper' ? 'Victory!' : 'Defeat!';
+  }
+
+  if (userChoice === computerChoice) result = 'Tie game!';
+  return [result, computerChoice];
+};
+
+const getResultColor = gamePrompt => {
+  if (gamePrompt === 'Victory!') return 'green';
+  if (gamePrompt === 'Defeat!') return 'red';
+  return 'black';
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -84,19 +148,24 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   choicesContainer: {
-    margin: 10,
-    borderWidth: 2,
-    paddingTop: 100,
-    shadowRadius: 5,
-    paddingBottom: 100,
-    borderColor: 'grey',
-    shadowOpacity: 0.90,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'white',
     justifyContent: 'space-around',
-    shadowColor: 'rgba(0,0,0,0.2)',
-    shadowOffset: { height: 5, width: 5 },
+    backgroundColor: 'white',   
+    borderColor: 'grey',
+    borderWidth: 2,
+    marginHorizontal: 10,
+    marginVertical: 30,
+    
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
   },
   choiceContainer: {
     flex: 1,
