@@ -174,12 +174,6 @@ const getResultColor = gamePrompt => {
   return 'black';
 };
 
-const calStatistic = result => {
-  var win = Number(result === 'Victory!');      
-  var lose = Number(result === 'Defeat!');
-  var tied = Number(result === 'Tie game!');
-  return [win,lose,tied]
-}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
