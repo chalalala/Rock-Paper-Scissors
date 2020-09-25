@@ -127,7 +127,7 @@ export default class App extends React.Component {
             transparent={false}
             visible={this.state.isVisible}
         >
-          <View style={styles.statisticContainer}>
+          <View>
             <Text style={styles.closeButton}
               onPress={() => {this.displayModal(false);}}>
                 X
