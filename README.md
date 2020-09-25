@@ -15,3 +15,4 @@ A Rock, Paper, Scissors game app built with **React Native** and **Expo**
 - User can see the percentages of wins, losses, and tie games they've had.
 
 ## Demo
+<img src="https://media0.giphy.com/media/fb5quHVtmmSSWhKfDx/giphy.gif" width="240px">

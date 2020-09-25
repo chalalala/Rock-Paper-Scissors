@@ -86,6 +86,17 @@ export default class App extends React.Component {
   displayModal(show){
     this.setState({isVisible: show})
   };
+  // resetStatistics = () => {
+  //   this.setState = {
+  //     gamePrompt: 'Choose your weapon!',
+  //     userChoice: {},
+  //     computerChoice: {},
+  //     win: 0,
+  //     lose: 0,
+  //     tied: 0,
+  //     total: 0,
+  //   };
+  // };
   
   render(){
     const {userChoice, computerChoice, win, lose, tied, total} = this.state;
@@ -140,6 +151,15 @@ export default class App extends React.Component {
               <StatisticCard name="Tied" value={tied} total={total}/>
               <Text style={styles.total}>Total games: {total}</Text>
             </View>
+
+            {/* <View style={styles.buttonContainer}>
+              <TouchableOpacity 
+                style={styles.resetButton}
+                onPress={this.resetStatistics}
+              >
+                <Text style={styles.buttonText}>Reset</Text>
+              </TouchableOpacity>
+            </View> */}
           </View>    
         </Modal>
       </View>  
@@ -264,5 +284,14 @@ const styles = StyleSheet.create({
     fontWeight:'600',
     textAlign:'center',
     marginTop:20,
-  }
+  },
+  // resetButton: {
+  //   width: 100,
+  //   height: 50,
+  //   borderRadius: 10,
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  //   marginTop: 20,
+  //   backgroundColor: '#640D14',
+  // }
 });
